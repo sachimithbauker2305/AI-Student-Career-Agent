@@ -6,7 +6,11 @@ from typing import Any, Dict, List, Optional, Tuple
 import requests
 
 
-class OllamaUnavailableError(RuntimeError):
+class AIUnavailableError(RuntimeError):
+    """Raised when the AI service cannot answer a request."""
+
+
+class OllamaUnavailableError(AIUnavailableError):
     """Raised when the Ollama service cannot answer a request."""
 
 
