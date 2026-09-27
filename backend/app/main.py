@@ -2,6 +2,7 @@ import os
 import sys
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles 
 from fastapi.middleware.cors import CORSMiddleware
 
 # Ensure root is in sys.path
@@ -104,8 +105,21 @@ app.include_router(dashboard.router)
 app.include_router(chatbot.router)
 app.include_router(saved_careers.router)
 
+# Serve React/Vite static assets
+if os.path.isdir(FRONTEND_DIST):
+    app.mount(
+        "/assets",
+        StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")),
+        name="assets"
+    )
+
 @app.get("/")
 def root():
+    index_file = os.path.join(FRONTEND_DIST, "index.html")
+
+    if os.path.isfile(index_file):
+        return FileResponse(index_file)
+
     return {"status": "ok"}
 
 @app.get("/api/health")
