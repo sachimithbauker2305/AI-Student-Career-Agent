@@ -1,0 +1,13 @@
+skill_id,name,category,difficulty,associated_domains,market_demand
+1,Python,Programming,Intermediate,"Technology,Data & Analytics",Very High
+2,Data Structures & Algorithms,Computer Science,Advanced,"Technology",Very High
+3,SQL & Database Querying,Data,Intermediate,"Data & Analytics,Technology",High
+4,Problem Solving,Core Cognitive,Beginner,"Technology,Business,Data & Analytics",Very High
+5,Machine Learning Fundamentals,AI/ML,Advanced,"Technology,Data & Analytics",Very High
+6,Figma & UI Prototyping,Design,Intermediate,"Design",High
+7,User Research & Testing,Design,Intermediate,"Design",Moderate
+8,Cloud Fundamentals (AWS/Azure),Infrastructure,Intermediate,"Technology",High
+9,Analytical Thinking,Core Cognitive,Beginner,"Data & Analytics,Business",High
+10,Effective Communication,Soft Skill,Beginner,"Business,Technology,Design",High
+11,Leadership & Teamwork,Soft Skill,Intermediate,"Business,Technology",High
+12,Time Management,Soft Skill,Beginner,"Business,Technology,Design",Moderate

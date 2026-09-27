@@ -1,0 +1,1398 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-[#18211f] antialiased min-h-screen;
+    background: #eef1ed;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: 'Times New Roman', Times, serif;
+  }
+}
+
+.hero-grid {
+  background-image: linear-gradient(rgba(24, 33, 31, 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(24, 33, 31, 0.055) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.hero-orbit {
+  animation: float 7s ease-in-out infinite;
+}
+
+.hero-orbit-delayed {
+  animation: float 7s ease-in-out 1.2s infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise-in {
+  animation: rise 700ms ease-out both;
+}
+
+.rise-in-delay-1 {
+  animation-delay: 100ms;
+}
+
+.rise-in-delay-2 {
+  animation-delay: 200ms;
+}
+
+.rise-in-delay-3 {
+  animation-delay: 300ms;
+}
+
+.home-page {
+  background: #eef1ed;
+}
+
+.home-page .home-nav {
+  background: #183f35;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.home-page .home-logo-mark {
+  background: #e86f51;
+  box-shadow: 0 8px 20px rgba(232, 111, 81, 0.25);
+}
+
+.home-page .home-nav-button {
+  background: #f8c76a;
+  color: #183f35;
+  box-shadow: 0 8px 20px rgba(248, 199, 106, 0.16);
+}
+
+.home-page .home-nav-button:hover {
+  background: #ffda88;
+  transform: translateY(-1px);
+}
+
+.home-page>main {
+  max-width: none;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.home-page .home-hero {
+  position: relative;
+  overflow: hidden;
+  background: #27483d;
+  color: #fffaf2;
+}
+
+.home-page .home-hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.34) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.34) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(90deg, black 0%, transparent 85%);
+}
+
+.home-page .home-hero::after {
+  content: '';
+  position: absolute;
+  width: 440px;
+  height: 440px;
+  right: -150px;
+  top: -180px;
+  border: 1px solid rgba(248, 199, 106, 0.35);
+  border-radius: 50%;
+  box-shadow: 0 0 0 42px rgba(248, 199, 106, 0.06), 0 0 0 84px rgba(248, 199, 106, 0.035);
+}
+
+.home-page .home-kicker {
+  background: rgba(248, 199, 106, 0.14);
+  border: 1px solid rgba(248, 199, 106, 0.34);
+  color: #f8c76a;
+}
+
+.home-page .home-title span {
+  color: #f1c46c;
+}
+
+.home-page .home-copy {
+  color: rgba(255, 250, 242, 0.7);
+}
+
+.home-page .home-primary-button {
+  background: #e86f51;
+}
+
+.home-page .home-primary-button:hover {
+  background: #f38364;
+}
+
+.home-page .home-secondary-button {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fffaf2;
+}
+
+.home-page .home-secondary-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.home-page .home-visual-glow {
+  background: #e86f51;
+  opacity: 0.22;
+}
+
+.home-page .home-visual-card {
+  min-height: 390px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(24, 63, 53, 0.7), rgba(11, 28, 24, 0.92)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=85') center / cover;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+}
+
+.home-page .home-visual-card::before {
+  content: '';
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -70px;
+  top: -60px;
+  border-radius: 50%;
+  background: #e86f51;
+  opacity: 0.8;
+}
+
+.home-page .home-feature {
+  background: #fffdf8;
+  border: 1px solid #ded5c5;
+  box-shadow: 0 12px 30px rgba(35, 43, 38, 0.05);
+}
+
+.home-page .home-feature-icon {
+  background: #e8f0e7;
+  color: #28705a;
+}
+
+.home-page .home-feature:nth-child(2) .home-feature-icon {
+  background: #fff0dd;
+  color: #c46a31;
+}
+
+.home-page .home-feature:nth-child(3) .home-feature-icon {
+  background: #fce5e0;
+  color: #cf5943;
+}
+
+.home-page .home-feature:nth-child(4) .home-feature-icon {
+  background: #f4e8bf;
+  color: #927016;
+}
+
+.home-page .home-section-label {
+  color: #d85d40;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-page .home-section-title {
+  color: #183f35;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1;
+}
+
+.app-surface {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #eef1ed;
+  background-image: linear-gradient(rgba(39, 72, 61, 0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(39, 72, 61, 0.045) 1px, transparent 1px), url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=65');
+  background-size: 34px 34px, 34px 34px, cover;
+  background-position: center, center, center;
+  background-attachment: fixed;
+}
+
+.app-surface>.flex-1 {
+  min-width: 0;
+  min-height: 0;
+  margin-left: 16rem;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.app-surface>.flex-1>div {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: clamp(1rem, 2vw, 2rem) !important;
+  padding-right: clamp(1rem, 2vw, 2rem) !important;
+}
+
+/* Remove large page-wrapper max-width gaps inside the logged-in app while preserving small text/card max-widths. */
+.app-surface .max-w-4xl,
+.app-surface .max-w-5xl,
+.app-surface .max-w-6xl,
+.app-surface .max-w-7xl,
+.app-surface .max-w-\[1500px\] {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Compact the excessive side whitespace created by centered max-width wrappers. */
+.app-surface>.flex-1>div.max-w-6xl,
+.app-surface>.flex-1>div[class*="max-w-"] {
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Subtle entrance animation for each logged-in page. */
+@keyframes appPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-surface>.flex-1>div {
+  animation: appPageEnter 420ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-surface>.flex-1>div {
+    animation: none;
+  }
+}
+
+.app-surface>.app-sidebar {
+  margin-left: 0;
+  overflow-y: auto;
+}
+
+.app-surface::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: rgba(238, 241, 237, 0.91);
+  pointer-events: none;
+}
+
+.app-surface>* {
+  position: relative;
+  z-index: 1;
+}
+
+.app-surface h1,
+.app-surface h2,
+.app-surface h3,
+.app-surface h4 {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.app-surface .text-blue-600 {
+  color: #32755c;
+}
+
+.app-surface .text-blue-700,
+.app-surface .text-blue-800,
+.app-surface .text-blue-900,
+.app-surface .text-blue-950,
+.app-surface .text-indigo-600,
+.app-surface .text-indigo-700 {
+  color: #32755c;
+}
+
+.app-surface .bg-blue-50 {
+  background-color: #e4eee7;
+}
+
+.app-surface .bg-blue-50\/60,
+.app-surface .bg-blue-50\/70,
+.app-surface .bg-blue-100,
+.app-surface .bg-blue-100\/70,
+.app-surface .bg-indigo-50 {
+  background-color: #e4eee7;
+}
+
+.app-surface .bg-blue-600 {
+  background-color: #32755c;
+}
+
+.app-surface .border-blue-100,
+.app-surface .border-blue-200,
+.app-surface .border-indigo-100 {
+  border-color: #b8d0bb;
+}
+
+.app-surface .border-slate-100 {
+  border-color: #d8dfd7;
+}
+
+.app-surface .bg-slate-50 {
+  background-color: #f4f6f2;
+}
+
+.app-surface .text-slate-900 {
+  color: #27483d;
+}
+
+:root[data-theme='dark'] body {
+  background: #17251f;
+  color: #e8eee8;
+}
+
+:root[data-theme='dark'] .app-surface {
+  background-color: #17251f;
+  background-image: linear-gradient(rgba(232, 238, 232, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(232, 238, 232, 0.035) 1px, transparent 1px), url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=65');
+}
+
+:root[data-theme='dark'] .app-surface::before {
+  background: rgba(23, 37, 31, 0.93);
+}
+
+:root[data-theme='dark'] .app-surface aside,
+:root[data-theme='dark'] .app-surface .bg-white,
+:root[data-theme='dark'] .app-surface .bg-\[\#fffdf8\] {
+  background-color: #21352c;
+  border-color: #385045;
+}
+
+:root[data-theme='dark'] .app-surface .text-slate-900,
+:root[data-theme='dark'] .app-surface .text-slate-800,
+:root[data-theme='dark'] .app-surface .text-slate-700 {
+  color: #e8eee8;
+}
+
+:root[data-theme='dark'] .app-surface .text-slate-600,
+:root[data-theme='dark'] .app-surface .text-slate-500,
+:root[data-theme='dark'] .app-surface .text-slate-400 {
+  color: #adc0b4;
+}
+
+:root[data-theme='dark'] .app-surface .text-blue-600,
+:root[data-theme='dark'] .app-surface .text-blue-700,
+:root[data-theme='dark'] .app-surface .text-blue-800,
+:root[data-theme='dark'] .app-surface .text-blue-900,
+:root[data-theme='dark'] .app-surface .text-blue-950,
+:root[data-theme='dark'] .app-surface .text-indigo-600,
+:root[data-theme='dark'] .app-surface .text-indigo-700 {
+  color: #9ed2b3;
+}
+
+:root[data-theme='dark'] .app-surface .border-slate-100,
+:root[data-theme='dark'] .app-surface .border-slate-50 {
+  border-color: #385045;
+}
+
+:root[data-theme='dark'] .app-surface .bg-slate-50,
+:root[data-theme='dark'] .app-surface .bg-slate-50\/80,
+:root[data-theme='dark'] .app-surface .bg-\[\#f4f6f2\] {
+  background-color: #294239;
+}
+
+:root[data-theme='dark'] .app-surface .bg-slate-100 {
+  background-color: #385747;
+}
+
+:root[data-theme='dark'] .app-surface .bg-slate-200 {
+  background-color: #466255;
+}
+
+:root[data-theme='dark'] .app-surface .border-slate-200 {
+  border-color: #527661;
+}
+
+:root[data-theme='dark'] .app-surface .bg-amber-50,
+:root[data-theme='dark'] .app-surface .bg-indigo-50,
+:root[data-theme='dark'] .app-surface .bg-sky-50,
+:root[data-theme='dark'] .app-surface .bg-pink-50,
+:root[data-theme='dark'] .app-surface .bg-emerald-50 {
+  background-color: #304b3e;
+}
+
+:root[data-theme='dark'] .app-surface .text-amber-600,
+:root[data-theme='dark'] .app-surface .text-indigo-600,
+:root[data-theme='dark'] .app-surface .text-sky-600,
+:root[data-theme='dark'] .app-surface .text-pink-600,
+:root[data-theme='dark'] .app-surface .text-emerald-600,
+:root[data-theme='dark'] .app-surface .text-emerald-700 {
+  color: #a9e0b9;
+}
+
+:root[data-theme='dark'] .app-surface .border-amber-100,
+:root[data-theme='dark'] .app-surface .border-indigo-100,
+:root[data-theme='dark'] .app-surface .border-sky-100,
+:root[data-theme='dark'] .app-surface .border-pink-100,
+:root[data-theme='dark'] .app-surface .border-emerald-100 {
+  border-color: #527661;
+}
+
+:root[data-theme='dark'] .app-surface .text-slate-700 {
+  color: #d2e0d5;
+}
+
+:root[data-theme='dark'] .app-surface .text-slate-600 {
+  color: #c1d0c5;
+}
+
+:root[data-theme='dark'] .app-surface .text-slate-500 {
+  color: #adc0b4;
+}
+
+:root[data-theme='dark'] .action-status-progress {
+  background-color: #244c3a;
+  border-color: #4d8b68;
+  color: #b9f0c8;
+}
+
+:root[data-theme='dark'] .action-status-complete {
+  background-color: #263f58;
+  border-color: #5b8db8;
+  color: #b9dcff;
+}
+
+:root[data-theme='dark'] .action-status-upcoming {
+  background-color: #385747;
+  border-color: #527661;
+  color: #d2e0d5;
+}
+
+:root[data-theme='dark'] .app-surface .hover\:bg-slate-50:hover {
+  background-color: #304b3e;
+}
+
+:root[data-theme='dark'] .app-surface .hover\:text-slate-800:hover {
+  color: #f2f7f2;
+}
+
+:root[data-theme='dark'] .settings-page .bg-white {
+  background-color: #21352c;
+}
+
+:root[data-theme='dark'] .settings-page [class*='border-[#ded5c5]'],
+:root[data-theme='dark'] .settings-page [class*='border-[#d8dfd7]'],
+:root[data-theme='dark'] .settings-page .border-slate-100 {
+  border-color: #466255;
+}
+
+:root[data-theme='dark'] .settings-page [class*='text-[#183f35]'],
+:root[data-theme='dark'] .settings-page [class*='text-[#27483d]'] {
+  color: #e8eee8;
+}
+
+:root[data-theme='dark'] .settings-page [class*='text-[#28705a]'],
+:root[data-theme='dark'] .settings-page [class*='text-[#927016]'],
+:root[data-theme='dark'] .settings-page [class*='text-[#c46a31]'] {
+  color: #f1c46c;
+}
+
+:root[data-theme='dark'] .settings-page [class*='bg-[#e8f0e7]'],
+:root[data-theme='dark'] .settings-page [class*='bg-[#fff0dd]'],
+:root[data-theme='dark'] .settings-page [class*='bg-[#f4e8bf]'] {
+  background-color: #304b3e;
+}
+
+:root[data-theme='dark'] .settings-page [class*='bg-[#f4f6f2]'] {
+  background-color: #294239;
+  border-color: #466255;
+}
+
+:root[data-theme='dark'] .settings-page .text-slate-600,
+:root[data-theme='dark'] .settings-page .text-slate-500,
+:root[data-theme='dark'] .settings-page .text-slate-700 {
+  color: #c1d0c5;
+}
+
+:root[data-theme='dark'] .settings-page button.bg-white {
+  background-color: #385747;
+  color: #f2f7f2;
+}
+
+:root[data-theme='dark'] .settings-page input.bg-white,
+:root[data-theme='dark'] .settings-page input[type='email'],
+:root[data-theme='dark'] .settings-page input[type='password'] {
+  background-color: #1a2c24;
+  border-color: #527661;
+  color: #f2f7f2;
+}
+
+:root[data-theme='dark'] .settings-page input::placeholder {
+  color: #9bb3a2;
+}
+
+:root[data-theme='dark'] .settings-page .settings-password-modal {
+  background-color: #21352c;
+  border-color: #527661;
+}
+
+:root[data-theme='dark'] .settings-page .settings-password-modal .hover\:bg-slate-100:hover {
+  background-color: #385747;
+}
+
+:root[data-theme='dark'] .eligibility-page .eligibility-note {
+  background-color: #263f58;
+  border-color: #527fa6;
+}
+
+:root[data-theme='dark'] .eligibility-page .eligibility-note h3,
+:root[data-theme='dark'] .eligibility-page .eligibility-note p,
+:root[data-theme='dark'] .eligibility-page .eligibility-note div,
+:root[data-theme='dark'] .eligibility-page .eligibility-note svg {
+  color: #d5e9ff;
+}
+
+:root[data-theme='dark'] .eligibility-page select,
+:root[data-theme='dark'] .eligibility-page input {
+  background-color: #1a2c24;
+  border-color: #527661;
+  color: #f2f7f2;
+}
+
+:root[data-theme='dark'] .dashboard-page .bg-white,
+:root[data-theme='dark'] .recommendations-page .bg-white {
+  background-color: #21352c;
+}
+
+:root[data-theme='dark'] .dashboard-page .bg-slate-50,
+:root[data-theme='dark'] .recommendations-page .bg-slate-50 {
+  background-color: #294239;
+}
+
+.marketing-page.app-surface {
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.marketing-page .home-nav {
+  background: #27483d;
+}
+
+.marketing-kicker {
+  color: #c9654b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.marketing-title {
+  color: #27483d;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: clamp(2.6rem, 6vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin-top: 0.8rem;
+  max-width: 900px;
+}
+
+.marketing-lead {
+  color: #66756d;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-top: 1.5rem;
+  max-width: 680px;
+}
+
+.marketing-card,
+.feature-page-card,
+.marketing-callout {
+  background: rgba(255, 253, 248, 0.92);
+  border: 1px solid #d8dfd7;
+  border-radius: 1.25rem;
+  box-shadow: 0 14px 30px rgba(39, 72, 61, 0.07);
+}
+
+.marketing-card {
+  min-height: 260px;
+  padding: 1.5rem;
+}
+
+.marketing-number {
+  color: #c9654b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.marketing-callout {
+  padding: 2rem;
+}
+
+.feature-page-card {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.75rem;
+}
+
+.feature-page-icon {
+  align-items: center;
+  background: #e4eee7;
+  border-radius: 0.9rem;
+  color: #32755c;
+  display: flex;
+  flex-shrink: 0;
+  height: 3rem;
+  justify-content: center;
+  width: 3rem;
+}
+
+.reset-password-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: #eef1ed;
+  background-image: linear-gradient(rgba(39, 72, 61, 0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(39, 72, 61, 0.045) 1px, transparent 1px), url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=65');
+  background-size: 34px 34px, 34px 34px, cover;
+  background-position: center, center, center;
+  background-attachment: fixed;
+  box-sizing: border-box;
+}
+
+.reset-password-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: rgba(238, 241, 237, 0.9);
+  pointer-events: none;
+}
+
+.reset-password-card {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-page {
+  position: relative;
+  overflow: hidden;
+  background-color: #eef1ed;
+  background-image: linear-gradient(rgba(39, 72, 61, 0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(39, 72, 61, 0.045) 1px, transparent 1px), url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=65');
+  background-size: 34px 34px, 34px 34px, cover;
+  background-position: center, center, center;
+  background-attachment: fixed;
+}
+
+.auth-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: rgba(238, 241, 237, 0.9);
+  pointer-events: none;
+}
+
+.auth-page>* {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-card {
+  position: relative;
+  z-index: 1;
+  background: #fffdf8;
+  border: 1px solid #d8dfd7;
+  box-shadow: 0 28px 80px rgba(39, 72, 61, 0.18);
+}
+
+.auth-visual {
+  background: linear-gradient(145deg, #3e7864, #27483d);
+}
+
+.auth-icon {
+  background: #c9654b;
+  color: #fff;
+}
+
+.auth-form {
+  background: #fffdf8;
+}
+
+.auth-logo {
+  background: #27483d;
+}
+
+.home-page .home-about {
+  padding: 3rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.home-page .home-about .home-section-title {
+  color: #fffaf2;
+}
+
+.home-page .home-about-stat {
+  padding: 1rem 0.25rem 0;
+  border-top: 1px solid rgba(248, 199, 106, 0.35);
+}
+
+.home-page .home-about-stat span {
+  display: block;
+  color: #f8c76a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.home-page .home-about-stat strong {
+  display: block;
+  color: #fffaf2;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.home-page .home-about-stat p {
+  color: rgba(255, 250, 242, 0.58);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin-top: 0.35rem;
+}
+
+.home-page .home-features {
+  padding: 0.5rem 0 1rem;
+}
+
+@media (max-width: 640px) {
+  .home-page>main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .home-page .home-visual-card {
+    min-height: 330px;
+  }
+
+  .home-page .home-title {
+    font-size: 3rem;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Focused marketing-page spacing and motion polish. No layout changes outside these pages. */
+.marketing-page > main {
+  padding-top: 2.5rem !important;
+  padding-bottom: 3rem !important;
+}
+
+.marketing-page .marketing-grid {
+  margin-top: 2rem !important;
+}
+
+.marketing-page .marketing-callout,
+.marketing-page .text-center {
+  margin-top: 2rem !important;
+}
+
+.marketing-page .marketing-card,
+.marketing-page .feature-page-card,
+.marketing-page .marketing-callout {
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.marketing-page .marketing-card:hover,
+.marketing-page .feature-page-card:hover,
+.marketing-page .marketing-callout:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(39, 72, 61, 0.10);
+}
+
+.marketing-animate-card {
+  animation: marketing-card-in 420ms ease-out both;
+}
+
+.marketing-grid .marketing-animate-card:nth-child(1) { animation-delay: 40ms; }
+.marketing-grid .marketing-animate-card:nth-child(2) { animation-delay: 90ms; }
+.marketing-grid .marketing-animate-card:nth-child(3) { animation-delay: 140ms; }
+.marketing-grid .marketing-animate-card:nth-child(4) { animation-delay: 190ms; }
+
+@keyframes marketing-card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .marketing-page > main {
+    padding-top: 1.75rem !important;
+    padding-bottom: 2.25rem !important;
+  }
+
+  .marketing-page .marketing-grid,
+  .marketing-page .marketing-callout,
+  .marketing-page .text-center {
+    margin-top: 1.5rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketing-animate-card,
+  .marketing-page .marketing-card,
+  .marketing-page .feature-page-card,
+  .marketing-page .marketing-callout {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Student profile: use the available content width and add subtle, non-overlapping motion. */
+.student-profile-content {
+  animation: student-profile-content-in 420ms ease-out both;
+}
+
+.student-profile-card {
+  animation: student-profile-card-in 480ms ease-out both;
+}
+
+.student-profile-card > div:nth-child(2),
+.student-profile-card > div:nth-child(3),
+.student-profile-card > div:nth-child(4) {
+  animation: student-profile-section-in 420ms ease-out both;
+}
+
+.student-profile-card > div:nth-child(2) { animation-delay: 80ms; }
+.student-profile-card > div:nth-child(3) { animation-delay: 140ms; }
+.student-profile-card > div:nth-child(4) { animation-delay: 200ms; }
+
+.student-profile-card select,
+.student-profile-card input,
+.student-profile-card button {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.student-profile-card select:hover,
+.student-profile-card input:hover {
+  border-color: #b9cfc4;
+}
+
+.student-profile-card .flex-wrap > button:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes student-profile-content-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes student-profile-card-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes student-profile-section-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .student-profile-content,
+  .student-profile-card,
+  .student-profile-card > div:nth-child(2),
+  .student-profile-card > div:nth-child(3),
+  .student-profile-card > div:nth-child(4) {
+    animation: none !important;
+  }
+
+  .student-profile-card select,
+  .student-profile-card input,
+  .student-profile-card button {
+    transition: none !important;
+  }
+}
+
+/* Global app spacing polish: reduce excessive whitespace while preserving clear separation. */
+.app-surface > .flex-1 > div[class~="p-8"],
+.app-surface > .flex-1 > div[class*="md:p-8"] {
+  padding: 1.25rem 1.5rem !important;
+}
+
+.app-surface [class~="space-y-8"] > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.25rem !important;
+}
+
+.app-surface [class~="space-y-6"] > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem !important;
+}
+
+.app-surface [class~="space-y-5"] > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.875rem !important;
+}
+
+.app-surface [class~="gap-8"] {
+  gap: 1.25rem !important;
+}
+
+.app-surface [class~="gap-6"] {
+  gap: 1rem !important;
+}
+
+.app-surface [class~="gap-5"] {
+  gap: 0.875rem !important;
+}
+
+/* Give the main content a little more usable width so it does not sit in a narrow centered column. */
+.app-surface [class~="max-w-4xl"] {
+  max-width: 64rem !important;
+}
+
+.app-surface [class~="max-w-5xl"] {
+  max-width: 72rem !important;
+}
+
+.app-surface [class~="max-w-6xl"] {
+  max-width: 80rem !important;
+}
+
+/* Dashboard has its own responsive padding utilities. */
+.dashboard-page > .flex-1 > div:first-child {
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
+@media (max-width: 767px) {
+  .app-surface > .flex-1 > div[class~="p-8"],
+  .app-surface > .flex-1 > div[class*="md:p-8"] {
+    padding: 1rem !important;
+  }
+
+  .app-surface [class~="gap-8"] {
+    gap: 1rem !important;
+  }
+
+  .app-surface [class~="gap-6"] {
+    gap: 0.875rem !important;
+  }
+}
+
+
+/* Final app-wide spacing + subtle motion polish. Functional code untouched. */
+.app-surface > .flex-1 > div {
+  animation: app-page-enter 420ms ease-out both;
+}
+
+/* Reduce oversized page/container whitespace while keeping comfortable breathing room. */
+.app-surface > .flex-1 > div[class~="p-8"],
+.app-surface > .flex-1 > div[class*="md:p-8"] {
+  padding: 1.25rem 1.5rem !important;
+}
+
+.app-surface [class~="space-y-10"] > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.5rem !important;
+}
+
+.app-surface [class~="space-y-12"] > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.75rem !important;
+}
+
+.app-surface [class~="gap-10"] {
+  gap: 1.5rem !important;
+}
+
+.app-surface [class~="gap-12"] {
+  gap: 1.75rem !important;
+}
+
+/* Give centered content more usable width, which removes large side gaps. */
+.app-surface [class~="max-w-3xl"] { max-width: 62rem !important; }
+.app-surface [class~="max-w-4xl"] { max-width: 78rem !important; }
+.app-surface [class~="max-w-5xl"] { max-width: 88rem !important; }
+.app-surface [class~="max-w-6xl"] { max-width: 96rem !important; }
+
+/* Small interaction motion throughout the logged-in UI. */
+.app-surface button:not(:disabled),
+.app-surface a[role="button"] {
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.app-surface button:not(:disabled):hover,
+.app-surface a[role="button"]:hover {
+  transform: translateY(-1px);
+}
+
+/* Let cards lift very slightly without changing layout or causing overlap. */
+.app-surface .shadow-sm,
+.app-surface .shadow-md,
+.app-surface .shadow-lg,
+.app-surface .shadow-xl {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.app-surface .shadow-sm:hover,
+.app-surface .shadow-md:hover,
+.app-surface .shadow-lg:hover,
+.app-surface .shadow-xl:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes app-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1023px) {
+  .app-surface [class~="max-w-4xl"] { max-width: 100% !important; }
+  .app-surface [class~="max-w-5xl"] { max-width: 100% !important; }
+  .app-surface [class~="max-w-6xl"] { max-width: 100% !important; }
+}
+
+@media (max-width: 767px) {
+  .app-surface > .flex-1 > div[class~="p-8"],
+  .app-surface > .flex-1 > div[class*="md:p-8"] {
+    padding: 1rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-surface > .flex-1 > div,
+  .app-surface button:not(:disabled),
+  .app-surface a[role="button"],
+  .app-surface .shadow-sm,
+  .app-surface .shadow-md,
+  .app-surface .shadow-lg,
+  .app-surface .shadow-xl {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* ================================================================
+   FINAL APP LAYOUT FIX
+   Purpose: remove the large unused gutters/gaps throughout the
+   logged-in app while keeping clear spacing and avoiding overlap.
+   UI/functional logic is unchanged.
+   ================================================================ */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Use a real two-column shell so the content begins immediately
+   beside the fixed sidebar instead of carrying an extra gutter. */
+.app-surface {
+  display: grid !important;
+  grid-template-columns: 16rem minmax(0, 1fr) !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.app-surface > .app-sidebar {
+  grid-column: 1;
+  grid-row: 1;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 16rem !important;
+  height: 100vh !important;
+  margin: 0 !important;
+}
+
+.app-surface > .flex-1 {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+/* Page shells: use the entire available content column. */
+.app-surface > .flex-1 > div {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+  padding: 1.25rem 1.5rem 1.5rem !important;
+}
+
+/* Remove large centered wrapper gutters, but keep small text/card max widths intact. */
+.app-surface .max-w-3xl,
+.app-surface .max-w-4xl,
+.app-surface .max-w-5xl,
+.app-surface .max-w-6xl,
+.app-surface .max-w-7xl,
+.app-surface .max-w-\[1500px\] {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Tighten only the large spacing utilities used by the app shells. */
+.app-surface [class~="space-y-12"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem !important; }
+.app-surface [class~="space-y-10"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1.35rem !important; }
+.app-surface [class~="space-y-8"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1.2rem !important; }
+.app-surface [class~="space-y-6"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem !important; }
+.app-surface [class~="space-y-5"] > :not([hidden]) ~ :not([hidden]) { margin-top: .875rem !important; }
+
+.app-surface [class~="gap-12"] { gap: 1.5rem !important; }
+.app-surface [class~="gap-10"] { gap: 1.35rem !important; }
+.app-surface [class~="gap-8"] { gap: 1.2rem !important; }
+.app-surface [class~="gap-6"] { gap: 1rem !important; }
+.app-surface [class~="gap-5"] { gap: .875rem !important; }
+
+/* Reduce only the oversized page/card padding utilities. */
+.app-surface [class~="p-12"] { padding: 2rem !important; }
+.app-surface [class~="p-10"] { padding: 1.75rem !important; }
+.app-surface [class~="p-8"] { padding: 1.35rem !important; }
+.app-surface [class~="sm:p-10"] { padding: 1.75rem !important; }
+
+/* Subtle motion: one clean page entrance and lightweight interactive lift. */
+@keyframes finalAppPageEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.app-surface > .flex-1 > div {
+  animation: finalAppPageEnter 360ms ease-out both !important;
+}
+
+.app-surface button:not(:disabled),
+.app-surface a[role="button"] {
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease !important;
+}
+
+.app-surface button:not(:disabled):hover,
+.app-surface a[role="button"]:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1023px) {
+  .app-surface {
+    grid-template-columns: 13.5rem minmax(0, 1fr) !important;
+  }
+  .app-surface > .app-sidebar {
+    width: 13.5rem !important;
+  }
+  .app-surface > .flex-1 > div {
+    padding: 1rem 1.25rem 1.25rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-surface {
+    display: block !important;
+    overflow: hidden !important;
+  }
+  .app-surface > .app-sidebar {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  .app-surface > .flex-1 {
+    width: 100% !important;
+    height: auto !important;
+    min-height: calc(100vh - 4rem) !important;
+  }
+  .app-surface > .flex-1 > div {
+    padding: 1rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-surface > .flex-1 > div {
+    animation: none !important;
+  }
+  .app-surface button:not(:disabled),
+  .app-surface a[role="button"] {
+    transition: none !important;
+  }
+}
+
+/* Public marketing pages (About / Explore Tools) must use natural page height so the
+   entire page can scroll. This override intentionally applies only to .marketing-page. */
+.marketing-page.app-surface {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.marketing-page.app-surface > main {
+  min-height: calc(100vh - 6rem);
+}
+
+.brand-lockup, .sidebar-brand-lockup, .auth-brand-lockup {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.brand-name, .sidebar-brand-name, .auth-brand-name {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.brand-tagline, .sidebar-brand-tagline, .auth-brand-tagline {
+  margin-top: 0.28rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  opacity: 0.72;
+}
+
+.sidebar-brand-name { font-size: 1.15rem; }
+.sidebar-brand-tagline { font-size: 0.7rem; }
+.auth-brand-name { font-size: 1.15rem; }
+.auth-brand-tagline { font-size: 0.72rem; }
+
+/* Mobile app layout: keep the logged-in navigation compact and touch-friendly. */
+@media (max-width: 767px) {
+  .app-surface > .app-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 40 !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    background: #fffdf8 !important;
+  }
+
+  .app-surface > .app-sidebar > div:first-child {
+    width: 100%;
+  }
+
+  .app-surface > .app-sidebar nav {
+    display: flex !important;
+    gap: .35rem !important;
+    padding: .5rem .75rem !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+
+  .app-surface > .app-sidebar nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-surface > .app-sidebar nav a {
+    flex: 0 0 auto;
+    padding: .55rem .7rem !important;
+    font-size: .72rem !important;
+  }
+
+  .app-surface > .app-sidebar nav a svg {
+    width: .9rem !important;
+    height: .9rem !important;
+  }
+
+  .app-surface > .app-sidebar > div:last-child {
+    display: none !important;
+  }
+
+  .app-surface > .flex-1 {
+    min-height: calc(100vh - 7.5rem) !important;
+    height: auto !important;
+  }
+
+  .app-surface > .flex-1 > div {
+    min-height: calc(100vh - 7.5rem);
+  }
+
+  .sidebar-brand-tagline {
+    display: block;
+    max-width: 14rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-brand-tagline {
+    display: none;
+  }
+
+  .sidebar-brand-name {
+    font-size: 1.05rem;
+  }
+
+  .app-surface > .app-sidebar > div:first-child {
+    border-bottom: 1px solid #edf0eb;
+  }
+}

@@ -1,0 +1,8 @@
+course_id,program_name,domain,top_colleges,min_cgpa_or_pct,entrance_exams,duration_years,approx_fees,official_portal
+1,B.Tech Computer Science,Technology,"IIT Bombay, IIT Delhi, BITS Pilani, NIT Trichy, IIIT Hyderabad",75.0,"JEE Advanced, JEE Main, BITSAT",4,"₹ 8 - 12 Lakhs","https://jeeadv.ac.in"
+2,B.Tech Artificial Intelligence & Data Science,Technology,"IIT Hyderabad, BITS Pilani, DTU, VIT Vellore",75.0,"JEE Advanced, JEE Main, VITEEE",4,"₹ 8 - 14 Lakhs","https://jeemain.nta.nic.in"
+3,B.Sc Data Science & Applications,Data & Analytics,"IIT Madras (Online/Hybrid), Delhi University, ISI Kolkata",60.0,"Qualifier Exam / CUET",3,"₹ 3 - 6 Lakhs","https://study.iitm.ac.in/ds"
+4,Bachelor of Design (B.Des),Design,"NID Ahmedabad, IIT Bombay (IDC), NIFT Delhi, Srishti Institute",55.0,"UCEED, NID DAT, NIFT Entrance",4,"₹ 7 - 12 Lakhs","https://uceed.iitb.ac.in"
+5,Bachelor of Computer Applications (BCA),Technology,"Christ University, Symbiosis, Loyola College, Delhi University",50.0,"CUET, College Merit",3,"₹ 2 - 5 Lakhs","https://cuet.samarth.ac.in"
+6,Bachelor of Business Administration (BBA),Business,"IIM Indore (IPMAT), Shaheed Sukhdev (DU), NMIMS Mumbai",65.0,"IPMAT, CUET, NPAT",3,"₹ 4 - 15 Lakhs","https://www.iimidr.ac.in"
+7,B.Tech Electronics & Communication,Technology,"IIT Kharagpur, NIT Surathkal, BITS Pilani, NSUT",70.0,"JEE Advanced, JEE Main",4,"₹ 8 - 12 Lakhs","https://jeemain.nta.nic.in"
