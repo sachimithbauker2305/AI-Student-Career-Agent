@@ -10,8 +10,7 @@ from backend.app.routers.auth import get_current_user
 from backend.app.schemas.chatbot import ChatRequest, ChatResponse
 from backend.app.services.profile_service import get_or_create_profile
 from backend.app.services.recommendation_service import fetch_recommendations
-from backend.app.services.chatbot_service import ChatbotService, OllamaUnavailableError
-
+from backend.app.services.chatbot_service import ChatbotService, AIUnavailableError
 router = APIRouter(prefix="/api/chatbot", tags=["Career Assistant"])
 
 chatbot_service = ChatbotService()
@@ -94,7 +93,7 @@ def chat(
             chat_history=history,
             recommendations=recommendations,
         )
-    except OllamaUnavailableError as exc:
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except AIUnavailableError as exc:
+     raise HTTPException(status_code=503, detail=str(exc)) from exc
 
     return {"reply": reply}
