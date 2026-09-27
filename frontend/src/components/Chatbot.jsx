@@ -59,14 +59,18 @@ export default function Chatbot() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label="Open Career Assistant"
-        className={`fixed bottom-6 right-6 z-[70] w-14 h-14 rounded-full bg-[#27483d] text-white shadow-[0_14px_35px_rgba(39,72,61,0.28)] flex items-center justify-center transition-all hover:-translate-y-1 hover:bg-[#1f3d34] ${open ? 'scale-0 pointer-events-none' : 'scale-100'}`}
-      >
-        <MessageCircle className="w-6 h-6" />
-      </button>
+      <div className={`fixed bottom-6 right-6 z-[80] ${open ? 'pointer-events-none' : ''}`}>
+        <span className="chatbot-pulse-ring" aria-hidden="true" />
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open Career Assistant"
+          className={`chatbot-launcher w-14 h-14 rounded-full bg-[#27483d] text-white shadow-[0_14px_35px_rgba(39,72,61,0.28)] flex items-center justify-center transition-all hover:-translate-y-1 hover:bg-[#1f3d34] ${open ? 'scale-0 pointer-events-none' : 'scale-100'}`}
+        >
+          <MessageCircle className="w-6 h-6" />
+        </button>
+        {!open && <span className="chatbot-label">Ask NextStep</span>}
+      </div>
 
       {open && (
         <div className="fixed bottom-6 right-6 z-[70] w-[min(390px,calc(100vw-2rem))] h-[min(640px,calc(100vh-2rem))] bg-[#fffdf8] border border-[#d8dfd7] rounded-3xl shadow-[0_24px_70px_rgba(30,48,40,0.24)] overflow-hidden flex flex-col">

@@ -46,7 +46,7 @@ export default function CreateNewPassword() {
 
         <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Create New Password</h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
-          Your new password must be different from previous passwords and at least 8 characters long.
+          Your new password should be different from your old password and at least 8 characters long.
         </p>
 
         {error && <p className="mt-4 text-xs text-red-500">{error}</p>}

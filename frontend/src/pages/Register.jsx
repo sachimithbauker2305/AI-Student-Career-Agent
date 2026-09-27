@@ -31,7 +31,7 @@ export default function Register() {
       navigate('/student-profile');
     } catch (err) {
       if (!err.response) {
-        setError('The server is unavailable. Start the backend with: python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload');
+        setError('The server is unavailable right now. Please make sure the NextStep backend is running and try again.');
       } else if (err.response.status === 400 && err.response.data?.detail) {
         setError(err.response.data.detail);
       } else {

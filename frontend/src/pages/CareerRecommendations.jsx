@@ -25,8 +25,18 @@ export default function CareerRecommendations() {
     <div className="app-surface recommendations-page h-screen flex overflow-hidden">
       <Sidebar />
 
+      <div className="recommendation-live-background" aria-hidden="true">
+        <span className="recommendation-orb recommendation-orb-one" />
+        <span className="recommendation-orb recommendation-orb-two" />
+        <span className="recommendation-orb recommendation-orb-three" />
+        <span className="recommendation-particle recommendation-particle-one" />
+        <span className="recommendation-particle recommendation-particle-two" />
+        <span className="recommendation-particle recommendation-particle-three" />
+        <span className="recommendation-particle recommendation-particle-four" />
+      </div>
+
       <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-y-auto">
-        <div className="p-8 max-w-5xl w-full mx-auto space-y-6">
+        <div className="p-8 max-w-5xl w-full mx-auto space-y-6 recommendations-content">
           <Header
             title="Career Recommendations"
             subtitle="Explore digital and non-digital career paths ranked around your profile. Your stream is one factor, not a limit."

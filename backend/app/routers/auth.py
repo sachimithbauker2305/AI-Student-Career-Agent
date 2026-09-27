@@ -256,6 +256,8 @@ def reset_password(req: ResetPasswordRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid or expired OTP.")
     if len(req.new_password) < 8:
         raise HTTPException(status_code=400, detail="New password must be at least 8 characters long.")
+    if verify_password(req.new_password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="New password should be different from your old password.")
     user.hashed_password = hash_password(req.new_password)
     entry.is_used = True
     db.commit()

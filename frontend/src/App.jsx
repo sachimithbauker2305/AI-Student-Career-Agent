@@ -28,6 +28,7 @@ import InternshipFinder from './pages/InternshipFinder';
 import About from './pages/About';
 import Features from './pages/Features';
 import Chatbot from './components/Chatbot';
+import GlobalEffects from './components/GlobalEffects';
 
 function CareerAssistantLayer() {
   const { pathname: path } = useLocation();
@@ -47,9 +48,11 @@ function CareerAssistantLayer() {
   return publicPaths.has(path) ? null : <Chatbot />;
 }
 
+
 export default function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <GlobalEffects />
       <Routes>
         {/* Public & Authentication Routes */}
         <Route path="/" element={<Home />} />
