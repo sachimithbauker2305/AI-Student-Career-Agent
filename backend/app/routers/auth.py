@@ -4,8 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import os
 import secrets
-import smtplib
-from email.message import EmailMessage
+import requests
 
 
 def _load_backend_env():
@@ -196,27 +195,42 @@ def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
     db.add(reset_entry)
     db.commit()
 
-    smtp_host = os.getenv("SMTP_HOST")
-    smtp_port = int(os.getenv("SMTP_PORT", "587"))
-    smtp_username = os.getenv("SMTP_USERNAME")
-    smtp_password = os.getenv("SMTP_PASSWORD")
-    sender = os.getenv("SMTP_FROM", smtp_username)
-    if not all([smtp_host, smtp_username, smtp_password, sender]):
+    resend_api_key = os.getenv("RESEND_API_KEY")
+    sender = os.getenv("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+    if not resend_api_key:
         db.delete(reset_entry)
         db.commit()
-        raise HTTPException(status_code=503, detail="Email delivery is not configured. Set SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD and SMTP_FROM.")
+        raise HTTPException(status_code=503, detail="Email delivery is not configured. Set RESEND_API_KEY and RESEND_FROM_EMAIL.")
 
-    message = EmailMessage()
-    message["Subject"] = "Your NextStep password reset code"
-    message["From"] = sender
-    message["To"] = email
-    message.set_content(f"Your password reset OTP is {otp}. It expires in 10 minutes.")
+    email_payload = {
+        "from": sender,
+        "to": [email],
+        "subject": "Your NextStep password reset code",
+        "html": f"""
+            <div style="font-family: Arial, sans-serif; max-width: 520px; margin: auto; padding: 24px;">
+                <h2>NextStep Password Reset</h2>
+                <p>Your password reset verification code is:</p>
+                <div style="font-size: 32px; font-weight: bold; letter-spacing: 8px; margin: 24px 0;">{otp}</div>
+                <p>This code expires in <strong>10 minutes</strong>.</p>
+                <p>If you did not request a password reset, you can safely ignore this email.</p>
+            </div>
+        """
+    }
+
     try:
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=20) as smtp:
-            smtp.starttls()
-            smtp.login(smtp_username, smtp_password)
-            smtp.send_message(message)
-    except (OSError, smtplib.SMTPException) as exc:
+        response = requests.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {resend_api_key}",
+                "Content-Type": "application/json"
+            },
+            json=email_payload,
+            timeout=20
+        )
+        if not response.ok:
+            error_detail = response.text[:500]
+            raise RuntimeError(f"Resend API returned {response.status_code}: {error_detail}")
+    except (requests.RequestException, RuntimeError) as exc:
         db.delete(reset_entry)
         db.commit()
         raise HTTPException(status_code=502, detail=f"Unable to send the OTP email: {exc}")
