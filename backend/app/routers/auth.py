@@ -2,33 +2,21 @@ from fastapi import APIRouter, Depends, HTTPException, Header, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
+
 import os
 import secrets
-import requests
-
-
-def _load_backend_env():
-    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
-    if not os.path.exists(env_path):
-        return
-    try:
-        with open(env_path, encoding="utf-8") as env_file:
-            for line in env_file:
-                line = line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                key, value = line.split("=", 1)
-                os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
-    except OSError:
-        return
-
-
-_load_backend_env()
+import base64
+from email.message import EmailMessage
 from typing import Optional
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 
 from backend.app.database.database import get_db
 from backend.app.models.user import User, PasswordReset
 from backend.app.models.student_profile import StudentProfile
+
 from backend.app.schemas.auth import (
     UserRegisterRequest,
     UserLoginRequest,
@@ -39,6 +27,7 @@ from backend.app.schemas.auth import (
     ChangePasswordRequest,
     UserResponse
 )
+
 from backend.app.services.auth_service import (
     hash_password,
     verify_password,
@@ -46,62 +35,175 @@ from backend.app.services.auth_service import (
     decode_access_token
 )
 
-router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
-def get_current_user(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> User:
+# ---------------------------------------------------------
+# LOAD BACKEND .ENV FILE
+# ---------------------------------------------------------
+
+def _load_backend_env():
+    env_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "..", ".env")
+    )
+
+    if not os.path.exists(env_path):
+        return
+
+    try:
+        with open(env_path, encoding="utf-8") as env_file:
+            for line in env_file:
+                line = line.strip()
+
+                if not line:
+                    continue
+
+                if line.startswith("#"):
+                    continue
+
+                if "=" not in line:
+                    continue
+
+                key, value = line.split("=", 1)
+
+                os.environ.setdefault(
+                    key.strip(),
+                    value.strip().strip('"').strip("'")
+                )
+
+    except OSError:
+        return
+
+
+_load_backend_env()
+
+
+# ---------------------------------------------------------
+# ROUTER
+# ---------------------------------------------------------
+
+router = APIRouter(
+    prefix="/api/auth",
+    tags=["Authentication"]
+)
+
+
+# ---------------------------------------------------------
+# GET CURRENT USER
+# ---------------------------------------------------------
+
+def get_current_user(
+    authorization: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+) -> User:
+
     if not authorization:
-        # Provide default demo user if unauthenticated for smooth UX
-        user = db.query(User).filter(User.email == "name@gmail.com").first()
+
+        # Provide default demo user if unauthenticated
+        # for smooth UX
+
+        user = db.query(User).filter(
+            User.email == "name@gmail.com"
+        ).first()
+
         if not user:
             user = User(
                 first_name="Name",
                 last_name="",
                 email="name@gmail.com",
-                hashed_password=hash_password("DemoPassword123!"),
+                hashed_password=hash_password(
+                    "DemoPassword123!"
+                ),
                 is_verified=True
             )
+
             db.add(user)
             db.commit()
             db.refresh(user)
+
         return user
 
     try:
+
         scheme, token = authorization.split()
+
         if scheme.lower() != "bearer":
-            raise HTTPException(status_code=401, detail="Invalid token scheme")
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token scheme"
+            )
+
         payload = decode_access_token(token)
+
         if not payload:
-            raise HTTPException(status_code=401, detail="Expired or invalid token")
-        user = db.query(User).filter(User.id == payload.get("sub")).first()
+            raise HTTPException(
+                status_code=401,
+                detail="Expired or invalid token"
+            )
+
+        user = db.query(User).filter(
+            User.id == payload.get("sub")
+        ).first()
+
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(
+                status_code=404,
+                detail="User not found"
+            )
+
         return user
+
     except Exception:
+
         # Fallback to demo user
-        user = db.query(User).filter(User.email == "name@gmail.com").first()
+
+        user = db.query(User).filter(
+            User.email == "name@gmail.com"
+        ).first()
+
         if user:
             return user
-        raise HTTPException(status_code=401, detail="Unauthorized")
+
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized"
+        )
+
+
+# ---------------------------------------------------------
+# REGISTER
+# ---------------------------------------------------------
 
 @router.post("/register")
-def register(req: UserRegisterRequest, db: Session = Depends(get_db)):
+def register(
+    req: UserRegisterRequest,
+    db: Session = Depends(get_db)
+):
+
     email = req.email.strip().lower()
-    existing = db.query(User).filter(func.lower(User.email) == email).first()
+
+    existing = db.query(User).filter(
+        func.lower(User.email) == email
+    ).first()
+
     if existing:
-        raise HTTPException(status_code=400, detail="Email is already registered.")
-    
+        raise HTTPException(
+            status_code=400,
+            detail="Email is already registered."
+        )
+
     user = User(
         first_name=req.first_name,
         last_name=req.last_name,
         email=email,
         hashed_password=hash_password(req.password),
-        is_verified=True # Auto-verify for streamlined onboarding
+        is_verified=True
     )
+
     db.add(user)
     db.commit()
     db.refresh(user)
 
     # Initialize default student profile
+
     profile = StudentProfile(
         user_id=user.id,
         education_level="",
@@ -112,10 +214,15 @@ def register(req: UserRegisterRequest, db: Session = Depends(get_db)):
         skills="",
         profile_completion_percent=0
     )
+
     db.add(profile)
     db.commit()
 
-    token = create_access_token({"sub": user.id, "email": user.email})
+    token = create_access_token({
+        "sub": user.id,
+        "email": user.email
+    })
+
     return {
         "access_token": token,
         "token_type": "bearer",
@@ -128,18 +235,43 @@ def register(req: UserRegisterRequest, db: Session = Depends(get_db)):
         "message": "Account created successfully!"
     }
 
+
+# ---------------------------------------------------------
+# LOGIN
+# ---------------------------------------------------------
+
 @router.post("/login")
-def login(req: UserLoginRequest, db: Session = Depends(get_db)):
+def login(
+    req: UserLoginRequest,
+    db: Session = Depends(get_db)
+):
+
     email = req.email.strip().lower()
-    user = db.query(User).filter(func.lower(User.email) == email).first()
+
+    user = db.query(User).filter(
+        func.lower(User.email) == email
+    ).first()
 
     if not user:
-        raise HTTPException(status_code=401, detail="No account found for this email. Please register first.")
+        raise HTTPException(
+            status_code=401,
+            detail="No account found for this email. Please register first."
+        )
 
-    if not verify_password(req.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid email or password.")
+    if not verify_password(
+        req.password,
+        user.hashed_password
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password."
+        )
 
-    token = create_access_token({"sub": user.id, "email": user.email})
+    token = create_access_token({
+        "sub": user.id,
+        "email": user.email
+    })
+
     return {
         "access_token": token,
         "token_type": "bearer",
@@ -151,89 +283,307 @@ def login(req: UserLoginRequest, db: Session = Depends(get_db)):
         }
     }
 
+
+# ---------------------------------------------------------
+# VERIFY EMAIL
+# ---------------------------------------------------------
+
 @router.post("/verify-email")
-def verify_email(email: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == email).first()
+def verify_email(
+    email: str,
+    db: Session = Depends(get_db)
+):
+
+    user = db.query(User).filter(
+        User.email == email
+    ).first()
+
     if user:
         user.is_verified = True
         db.commit()
-    return {"status": "success", "message": "Email verified successfully."}
+
+    return {
+        "status": "success",
+        "message": "Email verified successfully."
+    }
+
+
+# ---------------------------------------------------------
+# CHANGE PASSWORD
+# ---------------------------------------------------------
 
 @router.post("/change-password")
-def change_password(req: ChangePasswordRequest, db: Session = Depends(get_db)):
-    email = req.email.strip().lower()
-    user = db.query(User).filter(func.lower(User.email) == email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="Account not found.")
-    if not verify_password(req.current_password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Current password is incorrect.")
-    if req.new_password != req.confirm_password:
-        raise HTTPException(status_code=400, detail="New password and confirm password do not match.")
-    if req.new_password == req.current_password:
-        raise HTTPException(status_code=400, detail="New password must be different from the current password.")
-    if len(req.new_password) < 8:
-        raise HTTPException(status_code=400, detail="New password must be at least 8 characters long.")
+def change_password(
+    req: ChangePasswordRequest,
+    db: Session = Depends(get_db)
+):
 
-    user.hashed_password = hash_password(req.new_password)
+    email = req.email.strip().lower()
+
+    user = db.query(User).filter(
+        func.lower(User.email) == email
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="Account not found."
+        )
+
+    if not verify_password(
+        req.current_password,
+        user.hashed_password
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Current password is incorrect."
+        )
+
+    if req.new_password != req.confirm_password:
+        raise HTTPException(
+            status_code=400,
+            detail="New password and confirm password do not match."
+        )
+
+    if req.new_password == req.current_password:
+        raise HTTPException(
+            status_code=400,
+            detail="New password must be different from the current password."
+        )
+
+    if len(req.new_password) < 8:
+        raise HTTPException(
+            status_code=400,
+            detail="New password must be at least 8 characters long."
+        )
+
+    user.hashed_password = hash_password(
+        req.new_password
+    )
+
     db.commit()
-    return {"status": "success", "message": "Password changed successfully."}
+
+    return {
+        "status": "success",
+        "message": "Password changed successfully."
+    }
+
+
+# ---------------------------------------------------------
+# FORGOT PASSWORD
+# ---------------------------------------------------------
 
 @router.post("/forgot-password")
-def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
+def forgot_password(
+    req: ForgotPasswordRequest,
+    db: Session = Depends(get_db)
+):
+
+    # -----------------------------------------------------
+    # STEP 1: CHECK USER
+    # -----------------------------------------------------
+
     email = req.email.strip().lower()
-    if not db.query(User).filter(func.lower(User.email) == email).first():
-        raise HTTPException(status_code=404, detail="No account found for this email.")
+
+    user = db.query(User).filter(
+        func.lower(User.email) == email
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="No account found for this email."
+        )
+
+
+    # -----------------------------------------------------
+    # STEP 2: GENERATE OTP
+    # -----------------------------------------------------
 
     otp = f"{secrets.randbelow(1000000):06d}"
-    expires_at = datetime.utcnow() + timedelta(minutes=10)
+
+    expires_at = datetime.utcnow() + timedelta(
+        minutes=10
+    )
+
+
+    # -----------------------------------------------------
+    # STEP 3: SAVE OTP TO DATABASE
+    # -----------------------------------------------------
+
     reset_entry = PasswordReset(
         email=email,
         otp_code=otp,
         expires_at=expires_at,
         is_used=False
     )
+
     db.add(reset_entry)
     db.commit()
 
-    resend_api_key = os.getenv("RESEND_API_KEY")
-    sender = os.getenv("RESEND_FROM_EMAIL", "onboarding@resend.dev")
-    if not resend_api_key:
+
+    # -----------------------------------------------------
+    # STEP 4: LOAD GMAIL ENVIRONMENT VARIABLES
+    # -----------------------------------------------------
+
+    gmail_client_id = os.getenv(
+        "GMAIL_CLIENT_ID"
+    )
+
+    gmail_client_secret = os.getenv(
+        "GMAIL_CLIENT_SECRET"
+    )
+
+    gmail_refresh_token = os.getenv(
+        "GMAIL_REFRESH_TOKEN"
+    )
+
+    sender = os.getenv(
+        "GMAIL_FROM_EMAIL",
+        "sachimit2305@gmail.com"
+    )
+
+
+    # -----------------------------------------------------
+    # STEP 5: CHECK GMAIL CONFIGURATION
+    # -----------------------------------------------------
+
+    if (
+        not gmail_client_id
+        or not gmail_client_secret
+        or not gmail_refresh_token
+    ):
+
         db.delete(reset_entry)
         db.commit()
-        raise HTTPException(status_code=503, detail="Email delivery is not configured. Set RESEND_API_KEY and RESEND_FROM_EMAIL.")
 
-    email_payload = {
-        "from": sender,
-        "to": [email],
-        "subject": "Your NextStep password reset code",
-        "html": f"""
-            <div style="font-family: Arial, sans-serif; max-width: 520px; margin: auto; padding: 24px;">
-                <h2>NextStep Password Reset</h2>
-                <p>Your password reset verification code is:</p>
-                <div style="font-size: 32px; font-weight: bold; letter-spacing: 8px; margin: 24px 0;">{otp}</div>
-                <p>This code expires in <strong>10 minutes</strong>.</p>
-                <p>If you did not request a password reset, you can safely ignore this email.</p>
-            </div>
-        """
-    }
+        raise HTTPException(
+            status_code=503,
+            detail="Gmail email delivery is not configured."
+        )
+
+
+    # -----------------------------------------------------
+    # STEP 6: CREATE EMAIL CONTENT
+    # -----------------------------------------------------
+
+    email_body = f"""
+NextStep Password Reset
+
+Your password reset verification code is:
+
+{otp}
+
+This code expires in 10 minutes.
+
+If you did not request a password reset, you can safely ignore this email.
+
+Regards,
+NextStep Career Agent
+"""
+
+
+    # -----------------------------------------------------
+    # STEP 7: CONNECT TO GMAIL API
+    # -----------------------------------------------------
 
     try:
-        response = requests.post(
-            "https://api.resend.com/emails",
-            headers={
-                "Authorization": f"Bearer {resend_api_key}",
-                "Content-Type": "application/json"
-            },
-            json=email_payload,
-            timeout=20
+
+        credentials = Credentials(
+            token=None,
+            refresh_token=gmail_refresh_token,
+            token_uri="https://oauth2.googleapis.com/token",
+            client_id=gmail_client_id,
+            client_secret=gmail_client_secret,
+            scopes=[
+                "https://www.googleapis.com/auth/gmail.send"
+            ]
         )
-        if not response.ok:
-            error_detail = response.text[:500]
-            raise RuntimeError(f"Resend API returned {response.status_code}: {error_detail}")
-    except (requests.RequestException, RuntimeError) as exc:
+
+
+        # -------------------------------------------------
+        # REFRESH ACCESS TOKEN
+        # -------------------------------------------------
+
+        if not credentials.valid:
+            credentials.refresh(
+                Request()
+            )
+
+
+        # -------------------------------------------------
+        # BUILD GMAIL SERVICE
+        # -------------------------------------------------
+
+        gmail_service = build(
+            "gmail",
+            "v1",
+            credentials=credentials,
+            cache_discovery=False
+        )
+
+
+        # -------------------------------------------------
+        # CREATE EMAIL MESSAGE
+        # -------------------------------------------------
+
+        message = EmailMessage()
+
+        message["To"] = email
+
+        message["From"] = sender
+
+        message["Subject"] = (
+            "Your NextStep password reset code"
+        )
+
+        message.set_content(
+            email_body
+        )
+
+
+        # -------------------------------------------------
+        # ENCODE EMAIL
+        # -------------------------------------------------
+
+        encoded_message = (
+            base64.urlsafe_b64encode(
+                message.as_bytes()
+            )
+            .decode()
+        )
+
+
+        # -------------------------------------------------
+        # SEND EMAIL THROUGH GMAIL API
+        # -------------------------------------------------
+
+        gmail_service.users().messages().send(
+            userId="me",
+            body={
+                "raw": encoded_message
+            }
+        ).execute()
+
+
+    # -----------------------------------------------------
+    # STEP 8: HANDLE EMAIL ERRORS
+    # -----------------------------------------------------
+
+    except Exception as exc:
+
         db.delete(reset_entry)
         db.commit()
-        raise HTTPException(status_code=502, detail=f"Unable to send the OTP email: {exc}")
+
+        raise HTTPException(
+            status_code=502,
+            detail=f"Unable to send the OTP email: {exc}"
+        )
+
+
+    # -----------------------------------------------------
+    # STEP 9: RETURN SUCCESS
+    # -----------------------------------------------------
 
     return {
         "status": "success",
@@ -241,44 +591,137 @@ def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
         "expires_in_seconds": 600
     }
 
+
+# ---------------------------------------------------------
+# VERIFY OTP
+# ---------------------------------------------------------
+
 @router.post("/verify-otp")
-def verify_otp(req: VerifyOTPRequest, db: Session = Depends(get_db)):
+def verify_otp(
+    req: VerifyOTPRequest,
+    db: Session = Depends(get_db)
+):
+
     entry = db.query(PasswordReset).filter(
-        func.lower(PasswordReset.email) == req.email.strip().lower(),
-        PasswordReset.otp_code == req.otp_code,
-        PasswordReset.is_used == False,
-        PasswordReset.expires_at > datetime.utcnow()
-    ).order_by(PasswordReset.id.desc()).first()
+        func.lower(PasswordReset.email)
+        == req.email.strip().lower(),
+
+        PasswordReset.otp_code
+        == req.otp_code,
+
+        PasswordReset.is_used
+        == False,
+
+        PasswordReset.expires_at
+        > datetime.utcnow()
+
+    ).order_by(
+        PasswordReset.id.desc()
+    ).first()
+
 
     if not entry:
-        raise HTTPException(status_code=400, detail="Invalid or expired OTP.")
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid or expired OTP."
+        )
 
-    return {"status": "success", "message": "OTP verified successfully."}
+
+    return {
+        "status": "success",
+        "message": "OTP verified successfully."
+    }
+
+
+# ---------------------------------------------------------
+# RESET PASSWORD
+# ---------------------------------------------------------
 
 @router.post("/reset-password")
-def reset_password(req: ResetPasswordRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(func.lower(User.email) == req.email.strip().lower()).first()
+def reset_password(
+    req: ResetPasswordRequest,
+    db: Session = Depends(get_db)
+):
+
+    user = db.query(User).filter(
+        func.lower(User.email)
+        == req.email.strip().lower()
+    ).first()
+
+
     if not user:
-        raise HTTPException(status_code=404, detail="Account not found.")
+        raise HTTPException(
+            status_code=404,
+            detail="Account not found."
+        )
+
+
     entry = db.query(PasswordReset).filter(
-        func.lower(PasswordReset.email) == req.email.strip().lower(),
-        PasswordReset.otp_code == req.otp_code,
-        PasswordReset.is_used == False,
-        PasswordReset.expires_at > datetime.utcnow()
-    ).order_by(PasswordReset.id.desc()).first()
+        func.lower(PasswordReset.email)
+        == req.email.strip().lower(),
+
+        PasswordReset.otp_code
+        == req.otp_code,
+
+        PasswordReset.is_used
+        == False,
+
+        PasswordReset.expires_at
+        > datetime.utcnow()
+
+    ).order_by(
+        PasswordReset.id.desc()
+    ).first()
+
+
     if not entry:
-        raise HTTPException(status_code=400, detail="Invalid or expired OTP.")
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid or expired OTP."
+        )
+
+
     if len(req.new_password) < 8:
-        raise HTTPException(status_code=400, detail="New password must be at least 8 characters long.")
-    if verify_password(req.new_password, user.hashed_password):
-        raise HTTPException(status_code=400, detail="New password should be different from your old password.")
-    user.hashed_password = hash_password(req.new_password)
+        raise HTTPException(
+            status_code=400,
+            detail="New password must be at least 8 characters long."
+        )
+
+
+    if verify_password(
+        req.new_password,
+        user.hashed_password
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="New password should be different from your old password."
+        )
+
+
+    user.hashed_password = hash_password(
+        req.new_password
+    )
+
     entry.is_used = True
+
     db.commit()
-    return {"status": "success", "message": "Password reset successfully."}
+
+
+    return {
+        "status": "success",
+        "message": "Password reset successfully."
+    }
+
+
+# ---------------------------------------------------------
+# GET CURRENT USER
+# ---------------------------------------------------------
 
 @router.get("/me")
-def me(current_user: User = Depends(get_current_user)):
+def me(
+    current_user: User = Depends(get_current_user)
+):
+
     return {
         "id": current_user.id,
         "first_name": current_user.first_name,
